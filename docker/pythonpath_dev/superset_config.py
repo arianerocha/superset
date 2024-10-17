@@ -92,7 +92,40 @@ class CeleryConfig:
 
 CELERY_CONFIG = CeleryConfig
 
-FEATURE_FLAGS = {"ALERT_REPORTS": True}
+FEATURE_FLAGS = {
+    # STABLE
+    # FLAGS RETAINED FOR RUNTIME CONFIGURATION
+    "ALERTS_ATTACH_REPORTS": True,
+    "ALLOW_ADHOC_SUBQUERY": True,
+    "DASHBOARD_RBAC ": True,
+    "DATAPANEL_CLOSED_BY_DEFAULT": True,
+    "DRUID_JOINS": False,
+    "EMBEDDABLE_CHARTS": True,
+    "EMBEDDED_SUPERSET": True,
+    "ENABLE_TEMPLATE_PROCESSING": True,
+    "DASHBOARD_CROSS_FILTERS": False,  # deprecated
+    # When set to False, this option renders HTML in Markdown components (instead of
+    # escaping it as plain text), e.g., Handlebars.
+    "ESCAPE_MARKDOWN_HTML": False,
+    "LISTVIEWS_DEFAULT_CARD_VIEW": True,
+    "SCHEDULED_QUERIES": True,
+    "SQLLAB_BACKEND_PERSISTENCE": True,
+    "THUMBNAILS": True,
+    # IN TESTING
+    "ALERT_REPORTS": True,
+    "HORIZONTAL_FILTER_BAR": True,
+}
+
+
+def get_membership(*args, **kwargs) -> None:
+    return kwargs["membership"]
+
+
+JINJA_CONTEXT_ADDONS = {
+    "get_membership": get_membership,
+}
+
+
 ALERT_REPORTS_NOTIFICATION_DRY_RUN = True
 WEBDRIVER_BASEURL = "http://superset:8088/"
 # The base URL for the email report hyperlinks.

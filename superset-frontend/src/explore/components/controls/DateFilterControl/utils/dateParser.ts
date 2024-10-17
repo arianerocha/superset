@@ -78,7 +78,7 @@ export const customTimeRangeDecode = (
   timeRange: string,
 ): CustomRangeDecodeType => {
   const splitDateRange = timeRange.split(SEPARATOR);
-
+  
   if (splitDateRange.length === 2) {
     const [since, until] = splitDateRange;
 
@@ -199,6 +199,7 @@ export const customTimeRangeEncode = (customRange: CustomRangeType): string => {
     untilGrainValue,
     anchorValue,
   } = { ...customRange };
+
   // specific : specific
   if (SPECIFIC_MODE.includes(sinceMode) && SPECIFIC_MODE.includes(untilMode)) {
     const since =

@@ -31,6 +31,9 @@ interface Results {
 export const useGetTimeRangeLabel = (adhocFilter: AdhocFilter): Results => {
   const [actualTimeRange, setActualTimeRange] = useState<Results>({});
 
+  console.log('estamos aquiiii');
+  console.log(AdhocFilter);
+
   useEffect(() => {
     if (
       adhocFilter.operator !== Operators.TemporalRange ||

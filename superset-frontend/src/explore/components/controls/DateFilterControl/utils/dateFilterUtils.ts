@@ -75,6 +75,7 @@ export const fetchTimeRange = async (
       response?.json?.result?.since || '',
       response?.json?.result?.until || '',
     );
+
     return {
       value: formatTimeRange(timeRangeString, columnPlaceholder),
     };

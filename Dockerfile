@@ -29,23 +29,29 @@ ARG NPM_BUILD_CMD="build"
 RUN apt-get update -qq \
     && apt-get install -yqq --no-install-recommends \
         build-essential \
-        python3
+        python3 \
+        zstd
 
 ENV BUILD_CMD=${NPM_BUILD_CMD} \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 # NPM ci first, as to NOT invalidate previous steps except for when package.json changes
-WORKDIR /app/superset-frontend
 
 RUN --mount=type=bind,target=/frontend-mem-nag.sh,src=./docker/frontend-mem-nag.sh \
-    /frontend-mem-nag.sh
+/frontend-mem-nag.sh
+
+WORKDIR /app/superset-frontend
+
+
+RUN mkdir -p /app/superset/static/assets
 
 RUN --mount=type=bind,target=./package.json,src=./superset-frontend/package.json \
-    --mount=type=bind,target=./package-lock.json,src=./superset-frontend/package-lock.json \
-    npm ci
+    --mount=type=bind,target=./package-lock.json,src=./superset-frontend/package-lock.json 
+    # npm ci
 
-COPY ./superset-frontend ./
+COPY ./superset-frontend /app/superset-frontend
+# COPY superset-frontend /app/superset-frontend
 # This seems to be the most expensive step
-RUN npm run ${BUILD_CMD}
+# RUN npm run ${BUILD_CMD}
 
 ######################################################################
 # Final lean image...

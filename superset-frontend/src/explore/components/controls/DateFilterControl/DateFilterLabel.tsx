@@ -45,6 +45,7 @@ import {
   FRAME_OPTIONS,
   guessFrame,
   useDefaultTimeFilter,
+  parseTZ,
 } from './utils';
 import {
   CommonFrame,
@@ -182,27 +183,32 @@ export default function DateFilterLabel(props: DateFilterControlProps) {
       return;
     }
     fetchTimeRange(value).then(({ value: actualRange, error }) => {
+      
       if (error) {
         setEvalResponse(error || '');
         setValidTimeRange(false);
         setTooltipTitle(value || null);
       } else {
         /*
-          HRT == human readable text
-          ADR == actual datetime range
-          +--------------+------+----------+--------+----------+-----------+
-          |              | Last | Previous | Custom | Advanced | No Filter |
-          +--------------+------+----------+--------+----------+-----------+
-          | control pill | HRT  | HRT      | ADR    | ADR      |   HRT     |
-          +--------------+------+----------+--------+----------+-----------+
-          | tooltip      | ADR  | ADR      | HRT    | HRT      |   ADR     |
-          +--------------+------+----------+--------+----------+-----------+
+        HRT == human readable text
+        ADR == actual datetime range
+        +--------------+------+----------+--------+----------+-----------+
+        |              | Last | Previous | Custom | Advanced | No Filter |
+        +--------------+------+----------+--------+----------+-----------+
+        | control pill | HRT  | HRT      | ADR    | ADR      |   HRT     |
+        +--------------+------+----------+--------+----------+-----------+
+        | tooltip      | ADR  | ADR      | HRT    | HRT      |   ADR     |
+        +--------------+------+----------+--------+----------+-----------+
         */
+       
+       
+        actualRange = parseTZ(guessedFrame, actualRange, value);
         if (
           guessedFrame === 'Common' ||
           guessedFrame === 'Calendar' ||
           guessedFrame === 'No filter'
         ) {
+          
           setActualTimeRange(value);
           setTooltipTitle(
             getTooltipTitle(labelIsTruncated, value, actualRange),
@@ -228,8 +234,12 @@ export default function DateFilterLabel(props: DateFilterControlProps) {
         setValidTimeRange(true);
         return;
       }
+
       if (lastFetchedTimeRange !== timeRangeValue) {
+        
         fetchTimeRange(timeRangeValue).then(({ value: actualRange, error }) => {
+          actualRange = parseTZ(frame, actualRange, timeRangeValue);
+
           if (error) {
             setEvalResponse(error || '');
             setValidTimeRange(false);

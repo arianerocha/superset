@@ -107,6 +107,10 @@ export const URL_PARAMS = {
     name: 'focused_chart',
     type: 'number',
   },
+  dashboardTimezone: {
+    name: 'timezone',
+    type: 'string',
+  },
 } as const;
 
 export const RESERVED_CHART_URL_PARAMS: string[] = [

@@ -31,6 +31,7 @@ import {
 
 export function CommonFrame(props: FrameComponentProps) {
   let commonRange = 'Last week';
+
   if (COMMON_RANGE_SET.has(props.value as CommonRangeType)) {
     commonRange = props.value;
   } else {
